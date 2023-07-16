@@ -19,13 +19,22 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
-
-  
-
-  return state
+/*
+  ### Action types ###
+  1. VOTE_ANECDOTE: Provides an ID of the voted anecdote in the payload.
+*/
+const anecdoteReducer = (state = initialState, action) => {
+  console.log(`state now: ${JSON.stringify(state)}`)
+  console.log(`action: ${JSON.stringify(action)}}`)
+  switch (action.type) {
+    case 'VOTE_ANECDOTE':
+      const anecdoteId = action.payload.id
+      return state.map(anecdote => anecdote.id === anecdoteId
+        ? ({ ...anecdote, votes: anecdote.votes + 1 })
+        : anecdote)
+    default: // if none of the above matches, code comes here
+      return state
+  }
 }
 
-export default counterReducer
+export default anecdoteReducer
