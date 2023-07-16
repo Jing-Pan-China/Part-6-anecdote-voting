@@ -22,6 +22,7 @@ const initialState = anecdotesAtStart.map(asObject)
 /*
   ### Action types ###
   1. VOTE_ANECDOTE: Provides an ID of the voted anecdote in the payload.
+  2. NEW_ANECDOTE: Provides a new anecdote as a string in the payload.
 */
 const anecdoteReducer = (state = initialState, action) => {
   console.log(`state now: ${JSON.stringify(state)}`)
@@ -32,6 +33,12 @@ const anecdoteReducer = (state = initialState, action) => {
       return state.map(anecdote => anecdote.id === anecdoteId
         ? ({ ...anecdote, votes: anecdote.votes + 1 })
         : anecdote)
+    case 'NEW_ANECDOTE':
+      const newAnecdote = action.payload.anecdote
+      if (state.some(anecdote => anecdote.content === newAnecdote)) {
+        return state
+      }
+      return state.concat(asObject(action.payload.anecdote))
     default: // if none of the above matches, code comes here
       return state
   }
